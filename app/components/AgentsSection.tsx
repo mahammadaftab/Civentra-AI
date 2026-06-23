@@ -4,13 +4,12 @@ import { motion } from "framer-motion";
 import { Eye, AlertTriangle, Map, CheckCircle, TrendingUp, RefreshCw, BarChart2 } from "lucide-react";
 
 const agents = [
-  { name: "Vision Agent", description: "Analyzes images and videos.", icon: Eye, color: "blue" },
-  { name: "Severity Agent", description: "Calculates impact and urgency.", icon: AlertTriangle, color: "purple" },
-  { name: "Geo Intelligence Agent", description: "Maps and clusters issues.", icon: Map, color: "cyan" },
-  { name: "Verification Agent", description: "Validates reports.", icon: CheckCircle, color: "blue" },
-  { name: "Prediction Agent", description: "Forecasts future hotspots.", icon: TrendingUp, color: "purple" },
-  { name: "Resolution Agent", description: "Tracks outcomes.", icon: RefreshCw, color: "cyan" },
-  { name: "Analytics Agent", description: "Generates actionable insights.", icon: BarChart2, color: "blue" },
+  { name: "Vision Routing Agent", description: "Analyzes images, categorizes issues, and routes them to departments autonomously.", icon: Eye, color: "blue" },
+  { name: "Duplicate Detection Agent", description: "Uses Haversine distance and image hashes to block redundant civic reports.", icon: Map, color: "purple" },
+  { name: "Severity Agent", description: "Performs deep risk analysis to assign 0-100 severity scores.", icon: AlertTriangle, color: "cyan" },
+  { name: "Community Verification Agent", description: "Calculates mathematical consensus from nearby citizen reports.", icon: CheckCircle, color: "blue" },
+  { name: "Predictive Intelligence Agent", description: "Forecasts future infrastructure hotspots based on historical decay.", icon: TrendingUp, color: "purple" },
+  { name: "Resolution Verification Agent", description: "Acts as a strict City Inspector comparing Before/After photos.", icon: RefreshCw, color: "cyan" },
 ];
 
 export default function AgentsSection() {

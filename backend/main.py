@@ -9,7 +9,7 @@ from app.api.reports import router as reports_router
 from app.api.duplicate import router as duplicate_router
 from app.api.severity import router as severity_router
 from app.api.predictive import router as predictive_router
-from app.api.predictive import router as predictive_router
+from app.api.resolution import router as resolution_router
 
 load_dotenv()
 
@@ -35,7 +35,7 @@ app.include_router(reports_router, prefix="/api/reports", tags=["Reports"])
 app.include_router(duplicate_router, prefix="/api/agents/duplicate", tags=["Duplicate Detection"])
 app.include_router(severity_router, prefix="/api/agents/severity", tags=["Severity Detection"])
 app.include_router(predictive_router, prefix="/api/agents/predictive", tags=["Predictive Intelligence"])
-app.include_router(predictive_router, prefix="/api/agents/predictive", tags=["Predictive Intelligence"])
+app.include_router(resolution_router, prefix="/api/agents/resolution", tags=["Resolution Verification"])
 
 @app.get("/")
 def root():

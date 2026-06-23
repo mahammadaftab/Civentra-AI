@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useIssues, Issue } from "@/app/hooks/useIssues";
 import { motion } from "framer-motion";
 import { useAuth } from "@/app/hooks/useAuth";
-import { ArrowLeft, MapPin, AlertTriangle, ShieldCheck, DownloadCloud, Loader2, Activity } from "lucide-react";
+import { ArrowLeft, MapPin, AlertTriangle, ShieldCheck, DownloadCloud, Loader2, Activity, CheckCircle, XCircle, UploadCloud } from "lucide-react";
 import Timeline from "@/app/components/ui/Timeline";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -13,12 +13,17 @@ import { toast } from "sonner";
 export default function IssueDetailView() {
   const params = useParams();
   const router = useRouter();
-  const { issues, loading } = useIssues("citizen"); // Assuming citizen view, but hook handles all
+  const { issues, loading, uploadMediaFile, updateIssueStatus } = useIssues("citizen"); // Assuming citizen view, but hook handles all
   const { user } = useAuth();
   const isAdmin = user?.role === "super_admin" || user?.role === "department_admin";
   const [issue, setIssue] = useState<Issue | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  
+  // Resolution State
+  const [resolutionImage, setResolutionImage] = useState<File | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verificationResult, setVerificationResult] = useState<any>(null);
 
   useEffect(() => {
     if (!loading && params.id) {
@@ -74,6 +79,59 @@ export default function IssueDetailView() {
       toast.error("Analysis failed. Is the backend running?", { id: "severity-toast" });
     } finally {
       setIsAnalyzing(false);
+    }
+  };
+
+  const handleVerifyResolution = async () => {
+    if (!issue || !resolutionImage || !issue.media?.images[0]) {
+      toast.error("Please upload an After Photo.");
+      return;
+    }
+    
+    setIsVerifying(true);
+    setVerificationResult(null);
+    toast.loading("AI City Inspector is analyzing...", { id: "verify-toast" });
+
+    try {
+      // 1. Upload After Photo to Storage
+      const timestamp = Date.now();
+      const path = `issues/resolutions/${timestamp}_${resolutionImage.name}`;
+      const afterImageUrl = await uploadMediaFile(resolutionImage, path);
+
+      // 2. Call Verification Agent
+      const response = await fetch(`http://localhost:8000/api/agents/resolution/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          before_image_url: issue.media.images[0],
+          after_image_url: afterImageUrl
+        })
+      });
+
+      if (!response.ok) throw new Error("Verification failed");
+
+      const data = await response.json();
+      setVerificationResult(data);
+
+      // 3. Update Database if strictly Resolved
+      if (data.status === "Resolved") {
+        if (updateIssueStatus) {
+          await updateIssueStatus(
+            issue.id, 
+            "Resolved", 
+            `AI Inspector verified resolution with ${(data.confidence * 100).toFixed(0)}% confidence.\nReason: ${data.explanation}`
+          );
+        }
+        toast.success("Issue successfully verified and closed!", { id: "verify-toast" });
+      } else {
+        toast.error(`Verification Failed: ${data.status}`, { id: "verify-toast" });
+      }
+
+    } catch (error) {
+      console.error(error);
+      toast.error("Error during AI Verification.", { id: "verify-toast" });
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -229,6 +287,65 @@ export default function IssueDetailView() {
                       {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Activity className="w-4 h-4" />}
                       {isAnalyzing ? "Analyzing Risk..." : "Run Deep Severity Analysis"}
                     </button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+
+          {/* AI Resolution Verification Panel */}
+          {isAdmin && issue.status === "In Progress" && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="p-6 bg-emerald-900/10 border border-emerald-500/20 rounded-3xl"
+            >
+              <h3 className="text-lg font-medium text-emerald-400 mb-4 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5" /> Submit Resolution for AI Verification
+              </h3>
+              <p className="text-sm text-neutral-300 mb-6">
+                Upload a photo of the completed work. Our AI City Inspector will mathematically compare it against the original complaint photo to verify if the issue is actually resolved.
+              </p>
+
+              <div className="space-y-4">
+                <div className="border-2 border-dashed border-emerald-500/30 rounded-2xl p-8 text-center hover:bg-emerald-500/5 transition-colors">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) setResolutionImage(e.target.files[0]);
+                    }}
+                    className="hidden" 
+                    id="after-photo-upload" 
+                  />
+                  <label htmlFor="after-photo-upload" className="cursor-pointer flex flex-col items-center">
+                    <UploadCloud className="w-8 h-8 text-emerald-400 mb-2" />
+                    <span className="text-sm text-emerald-200">
+                      {resolutionImage ? resolutionImage.name : "Click to upload 'After' photo"}
+                    </span>
+                  </label>
+                </div>
+
+                <button 
+                  onClick={handleVerifyResolution}
+                  disabled={isVerifying || !resolutionImage}
+                  className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-medium transition-colors flex justify-center items-center gap-2"
+                >
+                  {isVerifying ? <Loader2 className="w-5 h-5 animate-spin" /> : <ShieldCheck className="w-5 h-5" />}
+                  {isVerifying ? "AI Inspector Analyzing..." : "Verify Resolution & Close Ticket"}
+                </button>
+
+                {/* AI Verification Results */}
+                {verificationResult && (
+                  <div className={`mt-4 p-4 rounded-xl border ${verificationResult.status === 'Resolved' ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                    <div className="flex items-center gap-2 mb-2">
+                      {verificationResult.status === 'Resolved' ? <CheckCircle className="w-5 h-5 text-emerald-400" /> : <XCircle className="w-5 h-5 text-red-400" />}
+                      <span className={`font-bold ${verificationResult.status === 'Resolved' ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {verificationResult.status} ({(verificationResult.confidence * 100).toFixed(0)}% Confidence)
+                      </span>
+                    </div>
+                    <p className="text-sm text-neutral-300 italic">{verificationResult.explanation}</p>
                   </div>
                 )}
               </div>

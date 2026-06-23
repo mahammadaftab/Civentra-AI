@@ -10,7 +10,8 @@ import {
   UsersRound, 
   ShieldAlert,
   LogOut,
-  MapPin
+  MapPin,
+  Brain
 } from "lucide-react";
 import { useAuth } from "@/app/hooks/useAuth";
 
@@ -18,6 +19,7 @@ const navItems = [
   { name: "Global Intelligence", href: "/admin", icon: Globe2 },
   { name: "Geo Map", href: "/admin/map", icon: MapPin },
   { name: "Agent Health", href: "/admin/agents", icon: Activity },
+  { name: "Predictive AI", href: "/admin/predictive", icon: Brain },
   { name: "Departments", href: "/admin/departments", icon: ServerCog },
   { name: "User Management", href: "/admin/users", icon: UsersRound },
   { name: "Security Audit", href: "/admin/security", icon: ShieldAlert },

@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Inbox, Clock, CheckCircle, TrendingDown, AlertTriangle, MapPin, HardHat, ChevronDown } from "lucide-react";
