@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Civentra AI 🏙️🤖
 
-## Getting Started
+**Autonomous Multi-Agent Civic Intelligence Platform**
 
-First, run the development server:
+Communities frequently face issues such as potholes, water leakages, damaged streetlights, waste management concerns, and public infrastructure challenges. Reporting these issues is often fragmented, difficult to track, and lacks transparency.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**Civentra AI** is a next-generation platform that enables citizens to identify, report, validate, track, and resolve community issues through collaboration, data, and intelligent automation. Our solution leverages a multi-agent AI system to ensure transparency, accountability, and active community participation.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🌟 Key Features
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Image & Video-Based Issue Reporting**: Frictionless reporting using Next.js 15 and Firebase Storage.
+- **AI-Powered Issue Categorization**: Automated classification and severity scoring via Gemini Vision and Gemini 2.5 Flash.
+- **Geo-Location & Mapping**: Dynamic hot-spot prediction and mapping using Google Maps Platform and Vertex AI.
+- **Community Verification**: Crowdsourced validation layer to prevent duplicate reports.
+- **Real-Time Issue Tracking**: Live command center dashboards for authorities.
+- **Predictive Insights**: AI forecasts for proactive infrastructure maintenance.
+- **Gamification for Citizen Engagement**: "Hero Rewards" system to encourage active civic participation.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🏗️ Architecture
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Civentra AI is designed as a highly scalable, serverless enterprise application.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Tech Stack
+- **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS, Shadcn UI, Framer Motion, React Three Fiber.
+- **Backend**: FastAPI (Python), Google Cloud Tasks for agent orchestration.
+- **Database**: Firebase Firestore (NoSQL) with strict Role-Based Access Control (RBAC).
+- **AI / ML**: Gemini 2.5 Flash, Gemini Vision, Google Vertex AI.
+- **Deployment**: Vercel (Frontend Edge Network), Google Cloud Run (Backend API).
 
-## Deploy on Vercel
+### The Multi-Agent Workflow
+When a citizen reports an issue, our intelligent workforce takes over:
+1. **Vision Agent**: Analyzes media for structural damage.
+2. **Severity Agent**: Calculates impact and urgency.
+3. **Geo Intelligence Agent**: Maps and clusters issues.
+4. **Verification Agent**: Validates reports and flags duplicates.
+5. **Resolution Agent**: Routes the issue to the correct municipal department.
+6. **Analytics Agent**: Generates actionable insights and predictive forecasts.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18.x or later
+- npm, yarn, or pnpm
+- Firebase Project credentials
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/mahammadaftab/Civentra-AI.git
+   cd Civentra-AI
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to explore the platform.
+
+---
+
+## 🎯 Evaluation Focus
+
+This platform demonstrates how AI can empower communities to address local challenges more efficiently through:
+- Improved and frictionless reporting.
+- Decentralized, crowdsourced verification.
+- Autonomous tracking and intelligent routing.
+- Faster, data-driven resolution of civic issues.
+
+---
+
+*Built for the future of Smart Cities.*

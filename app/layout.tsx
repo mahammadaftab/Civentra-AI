@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "sonner";
+import NotificationProvider from "@/app/components/providers/NotificationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,9 +39,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       style={{ colorScheme: "dark" }}
+      suppressHydrationWarning
     >
       <body className="min-h-full bg-brand-black text-foreground antialiased flex flex-col">
         {children}
+        <Toaster theme="dark" position="bottom-right" className="bg-neutral-900 border-white/10 text-white" />
+        <NotificationProvider />
       </body>
     </html>
   );

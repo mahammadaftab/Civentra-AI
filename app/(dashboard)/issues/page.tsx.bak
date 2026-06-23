@@ -1,0 +1,86 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { Search, Filter, MoreHorizontal, Clock, CheckCircle2, AlertTriangle, ShieldCheck } from "lucide-react";
+
+const issues = [
+  { id: "ISS-0921", title: "Pothole on Market St", status: "Analyzing", date: "2 hours ago", icon: Clock, color: "text-blue-400", bg: "bg-blue-500/10" },
+  { id: "ISS-0920", title: "Broken Traffic Light", status: "Verified", date: "Yesterday", icon: ShieldCheck, color: "text-purple-400", bg: "bg-purple-500/10" },
+  { id: "ISS-0855", title: "Graffiti on Public Library", status: "Resolved", date: "Last week", icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/10" },
+  { id: "ISS-0840", title: "Water Main Leak", status: "Action Required", date: "2 weeks ago", icon: AlertTriangle, color: "text-amber-400", bg: "bg-amber-500/10" },
+];
+
+export default function IssueTrackingPage() {
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Issue Tracking</h1>
+          <p className="text-neutral-400 mt-1">Monitor the status of your reported civic issues.</p>
+        </div>
+        <button className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition-colors">
+          New Report
+        </button>
+      </div>
+
+      {/* Filters and Search */}
+      <div className="flex gap-4 mb-6">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+          <input 
+            type="text" 
+            placeholder="Search by ID or keywords..." 
+            className="w-full bg-white/[0.02] border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500 transition-colors"
+          />
+        </div>
+        <button className="px-4 py-2 bg-white/[0.02] border border-white/10 hover:bg-white/[0.05] text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2">
+          <Filter className="w-4 h-4" /> Filter
+        </button>
+      </div>
+
+      {/* Issues Table/List */}
+      <div className="bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-white/[0.02] text-neutral-400 border-b border-white/5">
+              <tr>
+                <th className="px-6 py-4 font-medium">Issue ID</th>
+                <th className="px-6 py-4 font-medium">Title</th>
+                <th className="px-6 py-4 font-medium">Status</th>
+                <th className="px-6 py-4 font-medium">Reported</th>
+                <th className="px-6 py-4 font-medium text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/5 text-neutral-300">
+              {issues.map((issue, index) => (
+                <motion.div
+                  key={issue.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  as="tr"
+                  className="hover:bg-white/[0.02] transition-colors group"
+                >
+                  <td className="px-6 py-4 font-mono text-neutral-500">{issue.id}</td>
+                  <td className="px-6 py-4 font-medium text-white">{issue.title}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border border-white/5 ${issue.bg} ${issue.color}`}>
+                      <issue.icon className="w-3.5 h-3.5" />
+                      {issue.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-neutral-500">{issue.date}</td>
+                  <td className="px-6 py-4 text-right">
+                    <button className="p-2 text-neutral-500 hover:text-white hover:bg-white/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                      <MoreHorizontal className="w-4 h-4" />
+                    </button>
+                  </td>
+                </motion.div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}

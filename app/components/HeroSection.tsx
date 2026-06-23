@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Play } from "lucide-react";
+import Link from "next/link";
 import ThreeDNetwork from "./ThreeDNetwork";
 
 const agents = [
@@ -45,10 +46,10 @@ export default function HeroSection() {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <button className="w-full sm:w-auto px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 group">
+            <Link href="/login" className="w-full sm:w-auto px-8 py-4 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 group">
               Launch Platform
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <button className="w-full sm:w-auto px-8 py-4 glass-panel text-white font-semibold rounded-full hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
               <Play className="w-4 h-4" />
               Watch Demo
