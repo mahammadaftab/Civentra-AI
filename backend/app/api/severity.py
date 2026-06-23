@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 import google.generativeai as genai
 from app.services.firebase_admin_service import get_firestore_client
-from google.cloud.firestore import firestore
+from google.cloud import firestore
 
 router = APIRouter()
 

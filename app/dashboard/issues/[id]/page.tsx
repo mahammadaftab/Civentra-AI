@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useIssues, Issue } from "@/app/hooks/useIssues";
 import { motion } from "framer-motion";
-import { ArrowLeft, MapPin, AlertTriangle, ShieldCheck, DownloadCloud } from "lucide-react";
+import { useAuth } from "@/app/hooks/useAuth";
+import { ArrowLeft, MapPin, AlertTriangle, ShieldCheck, DownloadCloud, Loader2, Activity } from "lucide-react";
 import Timeline from "@/app/components/ui/Timeline";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -13,8 +14,11 @@ export default function IssueDetailView() {
   const params = useParams();
   const router = useRouter();
   const { issues, loading } = useIssues("citizen"); // Assuming citizen view, but hook handles all
+  const { user } = useAuth();
+  const isAdmin = user?.role === "super_admin" || user?.role === "department_admin";
   const [issue, setIssue] = useState<Issue | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
     if (!loading && params.id) {
@@ -48,6 +52,28 @@ export default function IssueDetailView() {
       toast.error("Error generating PDF. Is the backend running?", { id: "pdf-toast" });
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleDeepAnalysis = async () => {
+    if (!issue) return;
+    setIsAnalyzing(true);
+    toast.loading("Running Deep Severity Analysis...", { id: "severity-toast" });
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/agents/severity/analyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ issue_id: issue.id })
+      });
+      if (!response.ok) throw new Error("Failed to analyze severity");
+
+      toast.success("Deep Analysis Complete!", { id: "severity-toast" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Analysis failed. Is the backend running?", { id: "severity-toast" });
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -180,6 +206,31 @@ export default function IssueDetailView() {
                     <span className="font-medium text-white">{issue.department || 'Dept of Transportation'}</span>
                   </div>
                 </div>
+
+                {issue.riskScore !== undefined && (
+                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-purple-300/70 uppercase tracking-wider font-medium">Deep Risk Analysis</span>
+                      <span className="px-2 py-1 bg-red-500/20 text-red-400 border border-red-500/20 rounded font-bold text-xs">
+                        {issue.riskScore}/100 Risk Score
+                      </span>
+                    </div>
+                    <p className="text-sm text-neutral-300 italic">"{issue.severityReasoning}"</p>
+                  </div>
+                )}
+                
+                {isAdmin && issue.riskScore === undefined && (
+                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                    <button 
+                      onClick={handleDeepAnalysis}
+                      disabled={isAnalyzing}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-purple-600/50 hover:bg-purple-500/60 border border-purple-500/30 text-purple-100 rounded-xl transition-all font-medium text-sm disabled:opacity-50"
+                    >
+                      {isAnalyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Activity className="w-4 h-4" />}
+                      {isAnalyzing ? "Analyzing Risk..." : "Run Deep Severity Analysis"}
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           )}

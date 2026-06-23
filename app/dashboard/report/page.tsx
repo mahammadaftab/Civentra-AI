@@ -191,10 +191,32 @@ export default function ReportIssue() {
         mediaUrls.audio.push(url);
       }
 
+      // 3.5 AI Vision Routing
+      let visionData: any = {};
+      if (mediaUrls.images.length > 0) {
+        setLoadingText("AI routing to department...");
+        try {
+          const vRes = await fetch("http://localhost:8000/api/agents/vision/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ image_url: mediaUrls.images[0] })
+          });
+          if (vRes.ok) {
+            visionData = await vRes.json();
+          }
+        } catch (e) {
+          console.error("Vision agent failed", e);
+        }
+      }
+
       // 4. Submit to Firestore
       setLoadingText("Finalizing report...");
       const issueId = await reportIssue({
         ...formData,
+        category: visionData.category || formData.category,
+        severity: visionData.severity || "Medium",
+        department: visionData.suggested_department || "General Services",
+        confidence: visionData.confidence || 0,
         gpsCoordinates,
         media: mediaUrls
       });

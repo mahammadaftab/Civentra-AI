@@ -33,7 +33,7 @@ You MUST respond with a valid JSON object matching this exact schema:
   "category": "String (one of the categories above)",
   "confidence": "Float (between 0.0 and 1.0 representing your confidence)",
   "severity": "String (Low, Medium, High, Critical)",
-  "suggested_department": "String (e.g. Department of Transportation, Sanitation, Public Utilities)",
+  "suggested_department": "String (MUST BE EXACTLY ONE OF: Roads, Water, Electrical, Sanitation, Parks)",
   "risk_summary": "String (A 1-2 sentence summary of the immediate risks to public safety)"
 }
 

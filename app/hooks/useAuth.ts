@@ -20,9 +20,22 @@ export const useAuth = () => {
         const userSnap = await getDoc(userRef);
 
         let role: UserRole = 'citizen';
+        let heroData = {
+          heroPoints: 0,
+          trustScore: 50,
+          badges: ["Citizen Initiate"],
+          heroLevel: "Bronze Hero"
+        };
 
         if (userSnap.exists()) {
-          role = userSnap.data().role as UserRole;
+          const data = userSnap.data();
+          role = data.role as UserRole;
+          heroData = {
+            heroPoints: data.heroPoints || 0,
+            trustScore: data.trustScore || 50,
+            badges: data.badges || ["Citizen Initiate"],
+            heroLevel: data.heroLevel || "Bronze Hero"
+          };
         } else {
           // Check if there is a pending role from signup
           const pendingRole = useAppStore.getState().pendingRole;
@@ -34,6 +47,7 @@ export const useAuth = () => {
             displayName: firebaseUser.displayName,
             photoURL: firebaseUser.photoURL,
             role: role,
+            ...heroData,
             createdAt: new Date().toISOString(),
           });
         }
@@ -44,6 +58,7 @@ export const useAuth = () => {
           displayName: firebaseUser.displayName,
           photoURL: firebaseUser.photoURL,
           role: role,
+          ...heroData,
         };
 
         // Get ID token and set session cookie

@@ -8,6 +8,10 @@ export interface User {
   displayName: string | null;
   photoURL: string | null;
   role: UserRole;
+  heroPoints: number;
+  trustScore: number;
+  badges: string[];
+  heroLevel: string;
 }
 
 interface AppState {

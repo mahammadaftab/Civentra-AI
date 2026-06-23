@@ -9,7 +9,8 @@ import {
   serverTimestamp,
   updateDoc,
   doc,
-  arrayUnion
+  arrayUnion,
+  increment
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { db, storage } from "@/app/lib/firebase/config";
@@ -48,6 +49,8 @@ export interface Issue {
   confirmations?: string[];
   rejections?: string[];
   communityConfidenceScore?: number;
+  riskScore?: number;
+  severityReasoning?: string;
   events: IssueEvent[];
   createdAt: Date;
   updatedAt: Date;
@@ -133,6 +136,12 @@ export function useIssues(filterRole: "citizen" | "department_admin" | "super_ad
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       });
+      
+      // Award Hero Points
+      await updateDoc(doc(db, "users", user.uid), {
+        heroPoints: increment(10)
+      });
+
       return docRef.id;
     } catch (err: any) {
       console.error("Failed to report issue:", err);
