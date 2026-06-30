@@ -16,16 +16,17 @@ import { useIssues } from "@/app/hooks/useIssues";
 export default function DashboardHome() {
   const { issues, loading } = useIssues("citizen");
   
-  // Calculate real-time stats
-  const pendingCount = issues.filter(i => i.status === "Pending Verification").length;
-  const analyzingCount = issues.filter(i => i.status === "Analyzing" || i.status === "Action Required").length;
+  const pendingCount = issues.filter(i => i.status === "Submitted").length;
+  const analyzingCount = issues.filter(i => i.status === "Analyzed" || i.status === "Verified").length;
   const resolvedCount = issues.filter(i => i.status === "Resolved").length;
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "Pending Verification": return "text-amber-400 bg-amber-400/10 border-amber-400/20";
-      case "Analyzing": return "text-blue-400 bg-blue-400/10 border-blue-400/20";
-      case "Action Required": return "text-orange-400 bg-orange-400/10 border-orange-400/20";
+      case "Submitted": return "text-amber-400 bg-amber-400/10 border-amber-400/20";
+      case "Analyzed": return "text-blue-400 bg-blue-400/10 border-blue-400/20";
+      case "Verified": return "text-indigo-400 bg-indigo-400/10 border-indigo-400/20";
+      case "Assigned": return "text-orange-400 bg-orange-400/10 border-orange-400/20";
+      case "In Progress": return "text-teal-400 bg-teal-400/10 border-teal-400/20";
       case "Resolved": return "text-emerald-400 bg-emerald-400/10 border-emerald-400/20";
       default: return "text-neutral-400 bg-neutral-400/10 border-neutral-400/20";
     }

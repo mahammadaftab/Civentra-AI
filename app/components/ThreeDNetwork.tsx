@@ -72,9 +72,7 @@ function ConnectingLines() {
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
+          args={[positions, 3]}
         />
       </bufferGeometry>
       <lineBasicMaterial color="#3b82f6" transparent opacity={0.15} />

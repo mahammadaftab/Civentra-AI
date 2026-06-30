@@ -110,9 +110,24 @@ export function useIssues(filterRole: "citizen" | "department_admin" | "super_ad
   };
 
   const uploadMediaFile = async (file: File | Blob, path: string): Promise<string> => {
-    const fileRef = ref(storage, path);
-    await uploadBytes(fileRef, file);
-    return await getDownloadURL(fileRef);
+    // Bypass Firebase Storage completely using local API route to avoid CORS/404 issues
+    const formData = new FormData();
+    // Default name if file doesn't have one (like audio blob)
+    const fileName = file instanceof File ? file.name : "upload.webm";
+    // We pass the blob and a filename
+    formData.append("file", file, fileName);
+
+    const response = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload media file");
+    }
+
+    const data = await response.json();
+    return data.url;
   };
 
   const reportIssue = async (data: Omit<Issue, "id" | "complaintId" | "status" | "reportedBy" | "createdAt" | "updatedAt" | "events">) => {

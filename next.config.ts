@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/v0/b/:path*',
+        destination: 'https://firebasestorage.googleapis.com/v0/b/:path*',
+      },
+    ];
+  },
   async headers() {
     return [
       {

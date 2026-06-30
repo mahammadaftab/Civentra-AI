@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 const protectedRoutes = ['/dashboard', '/agents', '/map'];
 const adminRoutes = ['/admin', '/department'];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const session = request.cookies.get('session')?.value;
   const userRole = request.cookies.get('user_role')?.value;
   

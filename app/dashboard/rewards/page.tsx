@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Award, Star, Shield, TrendingUp, Medal, Crown } from "lucide-react";
+import { Award, Star, Shield, TrendingUp, Medal, Crown, CheckCircle, MapPin } from "lucide-react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "@/app/lib/firebase/config";
