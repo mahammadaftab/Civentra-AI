@@ -12,8 +12,8 @@ api_key = os.getenv("GEMINI_API_KEY")
 if api_key:
     genai.configure(api_key=api_key)
 
-# We use gemini-1.5-flash for fast, multimodal vision tasks
-VISION_MODEL = "gemini-1.5-flash"
+# We use gemini-2.5-flash for fast, multimodal vision tasks
+VISION_MODEL = "gemini-2.5-flash"
 
 SYSTEM_PROMPT = """
 You are an expert AI Vision Agent for a Smart City Civic Issue reporting platform.
