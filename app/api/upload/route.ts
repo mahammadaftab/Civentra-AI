@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     await writeFile(filepath, buffer);
 
     const protocol = req.headers.get("x-forwarded-proto") || "http";
-    const host = req.headers.get("host") || "localhost:3000";
+    const host = req.headers.get("host") || "https://civentra-ai.vercel.app";
     const url = `${protocol}://${host}/uploads/${filename}`;
 
     return NextResponse.json({ success: true, url: url });

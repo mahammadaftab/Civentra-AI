@@ -9,7 +9,7 @@ const bucket = getStorage().bucket('civentra-ai.appspot.com');
 
 const corsConfiguration = [
   {
-    origin: ['http://localhost:3000', 'https://civentra-ai.web.app', '*'],
+    origin: ['https://civentra-ai.vercel.app', 'https://civentra-ai.web.app', '*'],
     method: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     responseHeader: ['Content-Type', 'Authorization', 'x-goog-resumable'],
     maxAgeSeconds: 3600

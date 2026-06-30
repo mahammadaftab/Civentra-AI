@@ -38,7 +38,7 @@ export default function IssueDetailView() {
     toast.loading("Generating AI Civic Report...", { id: "pdf-toast" });
 
     try {
-      const response = await fetch(`http://localhost:8000/api/reports/download/${issue.id}`);
+      const response = await fetch(`https://civentra-ai-backend.onrender.com/api/reports/download/${issue.id}`);
       if (!response.ok) throw new Error("Failed to generate PDF");
 
       const blob = await response.blob();
@@ -66,7 +66,7 @@ export default function IssueDetailView() {
     toast.loading("Running Deep Severity Analysis...", { id: "severity-toast" });
 
     try {
-      const response = await fetch(`http://localhost:8000/api/agents/severity/analyze`, {
+      const response = await fetch(`https://civentra-ai-backend.onrender.com/api/agents/severity/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ issue_id: issue.id })
@@ -99,7 +99,7 @@ export default function IssueDetailView() {
       const afterImageUrl = await uploadMediaFile(resolutionImage, path);
 
       // 2. Call Verification Agent
-      const response = await fetch(`http://localhost:8000/api/agents/resolution/verify`, {
+      const response = await fetch(`https://civentra-ai-backend.onrender.com/api/agents/resolution/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 

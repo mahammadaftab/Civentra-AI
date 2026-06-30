@@ -131,7 +131,7 @@ export default function ReportIssue() {
       if (!duplicateWarning && gpsCoordinates) {
         setLoadingText("Running Duplicate Detection AI...");
         try {
-          const res = await fetch("http://localhost:8000/api/agents/duplicate/analyze", {
+          const res = await fetch("https://civentra-ai-backend.onrender.com/api/agents/duplicate/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -196,7 +196,7 @@ export default function ReportIssue() {
       if (mediaUrls.images.length > 0) {
         setLoadingText("AI routing to department...");
         try {
-          const vRes = await fetch("http://localhost:8000/api/agents/vision/analyze", {
+          const vRes = await fetch("https://civentra-ai-backend.onrender.com/api/agents/vision/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ image_url: mediaUrls.images[0] })

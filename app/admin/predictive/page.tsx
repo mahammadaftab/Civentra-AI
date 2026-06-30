@@ -15,7 +15,7 @@ export default function PredictiveCommandCenter() {
     setIsPredicting(true);
     setHasRun(true);
     try {
-      const res = await fetch("http://localhost:8000/api/agents/predictive/analyze", {
+      const res = await fetch("https://civentra-ai-backend.onrender.com/api/agents/predictive/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ issues })

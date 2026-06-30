@@ -134,7 +134,7 @@ def build_civic_report_pdf(issue_data: dict) -> io.BytesIO:
             except Exception:
                 pass
                 
-    qr_url = f"http://localhost:3000/dashboard/issues/{issue_data.get('id', '')}"
+    qr_url = f"https://civentra-ai.vercel.app/dashboard/issues/{issue_data.get('id', '')}"
     qr_bytes = generate_qr_code(qr_url)
     qr_img = RLImage(qr_bytes)
     qr_img._restrictSize(1.5 * inch, 1.5 * inch)

@@ -2,7 +2,7 @@ import axios from 'axios';
 import { auth } from './firebase/config';
 
 export const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000',
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL || 'https://civentra-ai-backend.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
